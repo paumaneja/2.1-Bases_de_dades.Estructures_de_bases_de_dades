@@ -1,2 +1,2 @@
-# 2.1-Bases-de-dades-Nivell1
-Exercicis SPRINT02 - Bases de dades - Nivell01
+# 2.1-Bases de dades
+Exercicis SPRINT02 - Bases de dades
