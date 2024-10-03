@@ -39,12 +39,29 @@ CREATE TABLE IF NOT EXISTS `optica_schema`.`supplier` (
   `phone` VARCHAR(20) NULL,
   `fax` VARCHAR(20) NULL,
   `NIF` VARCHAR(20) NULL,
-  `address_supplier_id` INT NULL,
+  `address_id` INT NOT NULL,
   PRIMARY KEY (`id_supplier`),
-  INDEX `address_id_idx` (`address_supplier_id` ASC) VISIBLE,
-  CONSTRAINT `address_supplier_id`
-    FOREIGN KEY (`address_supplier_id`)
+  INDEX `fk_supplier_address1_idx` (`address_id` ASC) VISIBLE,
+  CONSTRAINT `fk_supplier_address1`
+    FOREIGN KEY (`address_id`)
     REFERENCES `optica_schema`.`address` (`id_address`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `optica_schema`.`brand`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `optica_schema`.`brand` (
+  `id_brand` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL,
+  `supplier_id` INT NOT NULL,
+  PRIMARY KEY (`id_brand`),
+  INDEX `fk_brand_supplier1_idx` (`supplier_id` ASC) VISIBLE,
+  CONSTRAINT `fk_brand_supplier1`
+    FOREIGN KEY (`supplier_id`)
+    REFERENCES `optica_schema`.`supplier` (`id_supplier`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -55,7 +72,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `optica_schema`.`glass` (
   `id_glass` INT NOT NULL AUTO_INCREMENT,
-  `brand` VARCHAR(45) NULL,
   `left_glass_prescription` DECIMAL(4,2) NULL,
   `right_glass_prescription` DECIMAL(4,2) NULL,
   `frame` ENUM("floating", "pasta", "metallic") NULL,
@@ -63,12 +79,12 @@ CREATE TABLE IF NOT EXISTS `optica_schema`.`glass` (
   `left_glass_color` VARCHAR(20) NULL,
   `right_glass_color` VARCHAR(20) NULL,
   `price` DECIMAL(10,2) NULL,
-  `supplier_id` INT NULL,
+  `brand_id` INT NOT NULL,
   PRIMARY KEY (`id_glass`),
-  INDEX `supplier_id_idx` (`supplier_id` ASC) VISIBLE,
-  CONSTRAINT `supplier_id`
-    FOREIGN KEY (`supplier_id`)
-    REFERENCES `optica_schema`.`supplier` (`id_supplier`)
+  INDEX `fk_glass_brand1_idx` (`brand_id` ASC) VISIBLE,
+  CONSTRAINT `fk_glass_brand1`
+    FOREIGN KEY (`brand_id`)
+    REFERENCES `optica_schema`.`brand` (`id_brand`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -83,19 +99,19 @@ CREATE TABLE IF NOT EXISTS `optica_schema`.`customer` (
   `phone` VARCHAR(20) NULL,
   `email` VARCHAR(100) NULL,
   `register_date` DATE NULL,
-  `address_customer_id` INT NULL,
-  `recomendator_customer_id` INT NULL,
+  `recomendator_customer_id` INT NULL DEFAULT NULL,
+  `address_id` INT NOT NULL,
   PRIMARY KEY (`id_customer`),
-  INDEX `address_id_idx` (`address_customer_id` ASC) VISIBLE,
   INDEX `recomendator_customer_id_idx` (`recomendator_customer_id` ASC) VISIBLE,
-  CONSTRAINT `address_customer_id`
-    FOREIGN KEY (`address_customer_id`)
-    REFERENCES `optica_schema`.`address` (`id_address`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+  INDEX `fk_customer_address1_idx` (`address_id` ASC) VISIBLE,
   CONSTRAINT `recomendator_customer_id`
     FOREIGN KEY (`recomendator_customer_id`)
     REFERENCES `optica_schema`.`customer` (`id_customer`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_customer_address1`
+    FOREIGN KEY (`address_id`)
+    REFERENCES `optica_schema`.`address` (`id_address`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -119,26 +135,26 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `optica_schema`.`invoice` (
   `id_invoice` INT NOT NULL AUTO_INCREMENT,
   `invoice_date` DATE NULL,
-  `customer_id` INT NULL,
-  `employee_id` INT NULL,
-  `glass_id` INT NULL,
-  PRIMARY KEY (`id_invoice`),
-  INDEX `customer_id_idx` (`customer_id` ASC) VISIBLE,
-  INDEX `glass_id_idx` (`glass_id` ASC) VISIBLE,
-  INDEX `employee_id_idx` (`employee_id` ASC) VISIBLE,
-  CONSTRAINT `customer_id`
-    FOREIGN KEY (`customer_id`)
-    REFERENCES `optica_schema`.`customer` (`id_customer`)
+  `glass_id` INT NOT NULL,
+  `employee_id` INT NOT NULL,
+  `customer_id` INT NOT NULL,
+  PRIMARY KEY (`id_invoice`, `glass_id`, `employee_id`, `customer_id`),
+  INDEX `fk_invoice_glass1_idx` (`glass_id` ASC) VISIBLE,
+  INDEX `fk_invoice_employee1_idx` (`employee_id` ASC) VISIBLE,
+  INDEX `fk_invoice_customer1_idx` (`customer_id` ASC) VISIBLE,
+  CONSTRAINT `fk_invoice_glass1`
+    FOREIGN KEY (`glass_id`)
+    REFERENCES `optica_schema`.`glass` (`id_glass`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `employee_id`
+  CONSTRAINT `fk_invoice_employee1`
     FOREIGN KEY (`employee_id`)
     REFERENCES `optica_schema`.`employee` (`id_employee`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `glass_id`
-    FOREIGN KEY (`glass_id`)
-    REFERENCES `optica_schema`.`glass` (`id_glass`)
+  CONSTRAINT `fk_invoice_customer1`
+    FOREIGN KEY (`customer_id`)
+    REFERENCES `optica_schema`.`customer` (`id_customer`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
