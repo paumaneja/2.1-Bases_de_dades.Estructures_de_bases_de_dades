@@ -19,13 +19,13 @@ USE `optica_schema` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `optica_schema`.`address` (
   `id_address` INT NOT NULL AUTO_INCREMENT,
-  `street` VARCHAR(100) NULL,
-  `num` INT NULL,
-  `floor` INT NULL,
+  `street` VARCHAR(100) NOT NULL,
+  `num` INT NOT NULL,
+  `floor` INT NOT NULL,
   `door` INT NULL,
-  `city` VARCHAR(45) NULL,
-  `postal_code` VARCHAR(15) NULL,
-  `country` VARCHAR(45) NULL,
+  `city` VARCHAR(45) NOT NULL,
+  `postal_code` VARCHAR(15) NOT NULL,
+  `country` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id_address`))
 ENGINE = InnoDB;
 
@@ -35,10 +35,10 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `optica_schema`.`supplier` (
   `id_supplier` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100) NULL,
-  `phone` VARCHAR(20) NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `phone` VARCHAR(20) NOT NULL,
   `fax` VARCHAR(20) NULL,
-  `NIF` VARCHAR(20) NULL,
+  `NIF` VARCHAR(20) NOT NULL,
   `address_id` INT NOT NULL,
   PRIMARY KEY (`id_supplier`),
   INDEX `fk_supplier_address1_idx` (`address_id` ASC) VISIBLE,
@@ -55,7 +55,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `optica_schema`.`brand` (
   `id_brand` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL,
+  `name` VARCHAR(45) NOT NULL,
   `supplier_id` INT NOT NULL,
   PRIMARY KEY (`id_brand`),
   INDEX `fk_brand_supplier1_idx` (`supplier_id` ASC) VISIBLE,
@@ -72,13 +72,13 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `optica_schema`.`glass` (
   `id_glass` INT NOT NULL AUTO_INCREMENT,
-  `left_glass_prescription` DECIMAL(4,2) NULL,
-  `right_glass_prescription` DECIMAL(4,2) NULL,
-  `frame` ENUM("floating", "pasta", "metallic") NULL,
-  `frame_color` VARCHAR(20) NULL,
-  `left_glass_color` VARCHAR(20) NULL,
-  `right_glass_color` VARCHAR(20) NULL,
-  `price` DECIMAL(10,2) NULL,
+  `left_glass_prescription` DECIMAL(4,2) NOT NULL,
+  `right_glass_prescription` DECIMAL(4,2) NOT NULL,
+  `frame` ENUM("floating", "pasta", "metallic") NOT NULL,
+  `frame_color` VARCHAR(20) NOT NULL,
+  `left_glass_color` VARCHAR(20) NOT NULL,
+  `right_glass_color` VARCHAR(20) NOT NULL,
+  `price` DECIMAL(10,2) NOT NULL,
   `brand_id` INT NOT NULL,
   PRIMARY KEY (`id_glass`),
   INDEX `fk_glass_brand1_idx` (`brand_id` ASC) VISIBLE,
@@ -95,10 +95,10 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `optica_schema`.`customer` (
   `id_customer` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100) NULL,
-  `phone` VARCHAR(20) NULL,
-  `email` VARCHAR(100) NULL,
-  `register_date` DATE NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `phone` VARCHAR(20) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `register_date` DATE NOT NULL,
   `recomendator_customer_id` INT NULL DEFAULT NULL,
   `address_id` INT NOT NULL,
   PRIMARY KEY (`id_customer`),
@@ -122,9 +122,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `optica_schema`.`employee` (
   `id_employee` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100) NULL,
-  `phone` VARCHAR(20) NULL,
-  `email` VARCHAR(100) NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `phone` VARCHAR(20) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id_employee`))
 ENGINE = InnoDB;
 
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `optica_schema`.`invoice` (
   `glass_id` INT NOT NULL,
   `employee_id` INT NOT NULL,
   `customer_id` INT NOT NULL,
-  PRIMARY KEY (`id_invoice`, `glass_id`, `employee_id`, `customer_id`),
+  PRIMARY KEY (`id_invoice`, `employee_id`, `customer_id`, `glass_id`),
   INDEX `fk_invoice_glass1_idx` (`glass_id` ASC) VISIBLE,
   INDEX `fk_invoice_employee1_idx` (`employee_id` ASC) VISIBLE,
   INDEX `fk_invoice_customer1_idx` (`customer_id` ASC) VISIBLE,

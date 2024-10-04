@@ -16,14 +16,12 @@ INSERT INTO supplier (name, phone, fax, NIF, address_id) VALUES
 ('Vamos a ver', '666664532', '111221122', '34453423X', 9),
 ('Pa tus ojos', '666596755', '111221122', '67458723X', 10);
 
-
 INSERT INTO brand (name, supplier_id) VALUES
 ('Oakley', 1),
 ('Arnette', 3),
 ('Gucci', 1),
 ('Ray-Ban', 2),
 ('MarcaBlanca', 4);
-
 
 INSERT INTO glass (left_glass_prescription, right_glass_prescription, frame, frame_color, left_glass_color, right_glass_color, price, brand_id) VALUES
 (1.25, 1.25, 'floating', 'black', 'grey', 'grey', 100.2, 1),
@@ -32,7 +30,6 @@ INSERT INTO glass (left_glass_prescription, right_glass_prescription, frame, fra
 (0.80, 0.88, 'metallic', 'grey', 'red', 'red', 50.5, 3),
 (1.00, 1.25, 'pasta', 'brown', 'blue', 'blue', 159.9, 4),
 (1.24, 0.25, 'pasta', 'black', 'red', 'red', 110.0, 1);
-
 
 INSERT INTO customer (name, phone, email, register_date, recomendator_customer_id, address_id) VALUES
 ('Carlos', '666778899', 'carlos@mail.com', '2024-04-12', NULL, 1),
@@ -43,13 +40,11 @@ INSERT INTO customer (name, phone, email, register_date, recomendator_customer_i
 ('Maria', '999778899', 'maria@mail.com', '2024-08-09', 2, 5),
 ('Raquel', '666778888', 'raquel@mail.com', '2024-09-12', 3, 6);
 
-
 INSERT INTO employee (name, phone, email) VALUES
 ('Fran', '666558822', 'fran@optica.com'),
 ('Yuyi', '666334422', 'yuyi@optica.com'),
 ('Mortadelo', '666448822', 'mortadelo@optica.com'),
 ('Filemon', '666552211', 'filemon@optica.com');
-
 
 INSERT INTO invoice (invoice_date, glass_id, employee_id, customer_id) VALUES
 ('2024-09-25', 1, 1, 1),
