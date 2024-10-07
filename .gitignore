@@ -1,6 +1,12 @@
 # Compiled class file
 *.class
 
+# MySQL
+*.bak
+
+#MacOS
+*.DS_Store
+
 # Log file
 *.log
 
@@ -23,8 +29,4 @@
 hs_err_pid*
 replay_pid*
 
-# MySQL
-*.bak
 
-#MacOS
-*.DS_Store
