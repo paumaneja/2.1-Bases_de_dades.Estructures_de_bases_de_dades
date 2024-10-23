@@ -13,7 +13,7 @@ JOIN
 JOIN 
     invoice i ON g.id_glass = i.glass_id
 GROUP BY 
-    s.id_supplier, s.name, s.phone, s.NIF
+    s.id_supplier 
 HAVING 
     total_sales > 0
 ORDER BY 
